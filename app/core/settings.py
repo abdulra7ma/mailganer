@@ -16,7 +16,7 @@ ALLOWED_HOSTS = []
 
 THIRD_PARTY_APPS = ['crispy_forms']
 
-LOCAL_APPS = ['mail']
+LOCAL_APPS = ['app.mail']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -40,12 +40,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'core.urls'
+ROOT_URLCONF = 'app.core.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR.join(['mail', 'templates']), os.path.join(BASE_DIR, "mail", 'templates', 'email_templates')],
+        'DIRS': [BASE_DIR.join(['mail', 'templates']), os.path.join(BASE_DIR, "../../mail", 'templates', 'email_templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -66,7 +66,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, '../../db.sqlite3'),
     }
 }
 

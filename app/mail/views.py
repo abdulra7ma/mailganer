@@ -33,7 +33,7 @@ class NewsletterView(FormView):
 class ScheduledMailView(FormView):
     template_name = 'letter/newsletter.html'
     form_class = ScheduledMailForm
-    success_url = reverse_lazy("newsletter")
+    success_url = reverse_lazy("scheduled-newsletter")
 
     def form_valid(self, form):
         form.save()

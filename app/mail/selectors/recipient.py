@@ -1,4 +1,4 @@
-from mail.models import MailRecipient
+from app.mail.models import MailRecipient
 
 
 def get_all_recipient():

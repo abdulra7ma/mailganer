@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.template.loader import render_to_string
 
-from mail.selectors.recipient import get_all_recipient
+from app.mail.selectors.recipient import get_all_recipient
 from django.core.mail import get_connection, EmailMultiAlternatives
 
 
