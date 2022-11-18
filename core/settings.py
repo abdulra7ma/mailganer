@@ -104,17 +104,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = config("STATIC_URL", default="/static/", bool=str)
+STATIC_URL = config("STATIC_URL", default="/static/")
 
-MEDIA_URL = config("MEDIA_DIR_ROOT", default="/media/", bool=str)
-MEDIA_ROOT = config("MEDIA_DIR_ROOT", default="media/", bool=str)
+MEDIA_URL = config("MEDIA_DIR_ROOT", default="/media/")
+MEDIA_ROOT = config("MEDIA_DIR_ROOT", default="media/")
 
-EMAIL_BACKEND = config("EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend", bool=str)
-EMAIL_HOST = config("EMAIL_HOST", default="smtp.gmail.com", bool=str)
+EMAIL_BACKEND = config("EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend")
+EMAIL_HOST = config("EMAIL_HOST", default="smtp.gmail.com")
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = config("EMAIL_USER", bool=str)
-EMAIL_HOST_PASSWORD = config("EMAIL_PASSWORD", bool=str)
+EMAIL_HOST_USER = config("EMAIL_USER")
+EMAIL_HOST_PASSWORD = config("EMAIL_PASSWORD")
 
-DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", bool=str)
-EMAIL_FROM = config("EMAIL_FROM", bool=str)
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
+EMAIL_FROM = config("EMAIL_FROM")

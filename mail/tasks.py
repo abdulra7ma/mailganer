@@ -1,4 +1,4 @@
-from mail.services.mail.main import Mail
+from mail.services.mail.main import Mail, send_mass_html_mail
 
 
 def broadcast_newsletter(newsletter):
