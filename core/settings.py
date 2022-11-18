@@ -2,6 +2,8 @@ import os
 
 from django.template.context_processors import media
 
+from decouple import config
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -44,7 +46,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR.join(['mail', 'templates'])],
+        'DIRS': [BASE_DIR.join(['mail', 'templates']), os.path.join(BASE_DIR, "mail", 'templates', 'email_templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -103,7 +105,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = config("STATIC_URL", default="/static/", bool=str)
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = 'media/'
+MEDIA_URL = config("MEDIA_DIR_ROOT", default="/media/", bool=str)
+MEDIA_ROOT = config("MEDIA_DIR_ROOT", default="media/", bool=str)
+
+EMAIL_BACKEND = config("EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend", bool=str)
+EMAIL_HOST = config("EMAIL_HOST", default="smtp.gmail.com", bool=str)
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = config("EMAIL_USER", bool=str)
+EMAIL_HOST_PASSWORD = config("EMAIL_PASSWORD", bool=str)
