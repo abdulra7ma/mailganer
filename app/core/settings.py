@@ -1,10 +1,18 @@
 import os
 
 from decouple import config
+from pathlib import Path
 from django.template.context_processors import media
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+def rel(*path):
+    return BASE_DIR.joinpath(*path)
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'wtq^6d#k%mutsjznehecz12y)_#e+xg85!ta=gd*6-&9(jeelx'
@@ -45,7 +53,8 @@ ROOT_URLCONF = 'app.core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR.join(['mail', 'templates']), os.path.join(BASE_DIR, "../../mail", 'templates', 'email_templates')],
+        'DIRS': [rel('mail', 'templates'),
+                 rel("mail", 'templates', 'email_templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -65,8 +74,12 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, '../../db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': config('POSTGRES_DATABASE_HOST', default="localhost"),
+        'NAME': config('POSTGRES_DATABASE_NAME', default="postgres"),
+        'USER': config('POSTGRES_DATABASE_USER', default="postgres"),
+        'PASSWORD': config('POSTGRES_DATABASE_PASSWORD', default="db_password"),
+        'PORT': int(config('POSTGRES_DATABASE_PORT', default=5432)),
     }
 }
 
@@ -105,6 +118,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = config("STATIC_URL", default="/static/")
+STATIC_ROOT = config(
+    "STATIC_ROOT", default=rel("..", "public", "static")
+)
 
 MEDIA_URL = config("MEDIA_DIR_ROOT", default="/media/")
 MEDIA_ROOT = config("MEDIA_DIR_ROOT", default="media/")
