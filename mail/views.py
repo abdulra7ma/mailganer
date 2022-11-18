@@ -26,5 +26,5 @@ class NewsletterView(FormView):
 
     def form_valid(self, form):
         form.save()
-        broadcast_newsletter(form.instance)
+        broadcast_newsletter.delay(form.instance.id)
         return HttpResponseRedirect(self.get_success_url())

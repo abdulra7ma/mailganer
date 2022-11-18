@@ -2,6 +2,7 @@ from django.forms import ModelForm
 
 from .models import MailRecipient, Newsletter
 
+from celery import Celery
 
 class MailRecipientCreateForm(ModelForm):
     class Meta:

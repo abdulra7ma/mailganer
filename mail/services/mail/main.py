@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.core.mail import send_mass_mail
 from django.template.loader import render_to_string
 
 from mail.selectors.recipient import get_all_recipient
