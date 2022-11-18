@@ -1,9 +1,8 @@
-from mail.selectors.recipient import get_all_recipient
+from django.conf import settings
+from django.core.mail import send_mass_mail
 from django.template.loader import render_to_string
 
-from django.conf import settings
-
-from django.core.mail import send_mass_mail
+from mail.selectors.recipient import get_all_recipient
 
 
 class Mail:
@@ -18,7 +17,7 @@ class Mail:
                 "last_name": recipient.first_name,
                 "message_body": newsletter.body,
             })
-            messages.append((newsletter.title, message, settings.EMAIL_HOST_USER, [recipient.mail_address]))
+            messages.append((newsletter.title, message, settings.EMAIL_FROM, [recipient.mail_address]))
 
         return tuple(recipients)
 

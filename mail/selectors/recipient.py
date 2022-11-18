@@ -8,4 +8,3 @@ def get_all_recipient():
     :return: All mail recipients
     """
     return MailRecipient.objects.all()
-

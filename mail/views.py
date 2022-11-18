@@ -3,9 +3,10 @@ from __future__ import unicode_literals
 
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
-
 from django.views.generic import FormView
+
 from .forms import MailRecipientCreateForm, NewsletterForm
+from .tasks import broadcast_newsletter
 
 
 class SubscribeView(FormView):
@@ -25,6 +26,5 @@ class NewsletterView(FormView):
 
     def form_valid(self, form):
         form.save()
+        broadcast_newsletter(form.instance)
         return HttpResponseRedirect(self.get_success_url())
-
-

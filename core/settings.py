@@ -1,8 +1,7 @@
 import os
 
-from django.template.context_processors import media
-
 from decouple import config
+from django.template.context_processors import media
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -116,3 +115,6 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = config("EMAIL_USER", bool=str)
 EMAIL_HOST_PASSWORD = config("EMAIL_PASSWORD", bool=str)
+
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", bool=str)
+EMAIL_FROM = config("EMAIL_FROM", bool=str)

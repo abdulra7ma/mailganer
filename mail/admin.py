@@ -2,7 +2,8 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
-from .models import ScheduledMail, Newsletter, MailRecipient
+
+from .models import MailRecipient, Newsletter, ScheduledMail
 
 
 @admin.register(ScheduledMail)
