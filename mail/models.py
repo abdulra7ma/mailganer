@@ -26,15 +26,9 @@ class MailRecipient(models.Model):
 
 
 class ScheduledMail(models.Model):
-    subject = models.CharField(max_length=40)
-    template = models.FileField(upload_to='mail/mails')
+    title = models.CharField(max_length=128)
+    body = models.TextField()
     send_on = models.DateTimeField(default=timezone.now())
-    recipients_list = models.ManyToManyField(MailRecipient, related_name='mail_list')
 
     def __str__(self):
-        return self.subject
-
-    @classmethod
-    def get_today_mail(cls):
-        today = date.today()
-        return cls.objects.filter(send_on__year=today.year, send_on__month=today.month, send_on__day=today.day)
+        return self.title + "Send it on " + str(self.send_on)
