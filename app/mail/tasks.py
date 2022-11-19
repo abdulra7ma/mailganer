@@ -12,7 +12,9 @@ def broadcast_newsletter(self, newsletter_id):
     :return: Boolean
     """
 
-    newsletter = Newsletter.objects.get(id=newsletter_id)
+    newsletter = Newsletter.objects.using("default").get(id=newsletter_id)
+
+    print("", newsletter.title)
 
     mail = Mail()
     mail.send_emails(newsletter)
@@ -29,7 +31,7 @@ def broadcast_scheduled_newsletter(self, scd_newsletter_id):
     :return: Boolean
     """
 
-    newsletter = ScheduledMail.objects.get(id=scd_newsletter_id)
+    newsletter = ScheduledMail.objects.using("default").get(id=scd_newsletter_id)
 
     mail = Mail()
     mail.send_emails(newsletter)

@@ -1,0 +1,16 @@
+.DS_Store
+README.md
+.editorconfig
+.gitignore
+provisioning
+public
+
+# Django project
+**/.env
+*.sqlite3
+
+# Git
+.git/
+
+# Python
+**/__pycache__

@@ -1,45 +1,53 @@
 version: "3.9"
 
 services:
-  db:
-    image: postgres:14-bullseye
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    container_name: db
-    expose:
-      - 5432
-    env_file:
-      - ./docker/env/.env.db.prod
-    networks:
-      - backend
-
   app:
     build:
       context: .
       dockerfile: ./docker/DockerFile.prod
     command: >
-      sh -c "cd ./app && gunicorn quran_kg.wsgi:application --bind 0.0.0.0:8000"
+      sh -c "gunicorn app.core.wsgi:application --bind 0.0.0.0:8000"
     volumes:
-      - static_volume:/var/www/api.quran.kg/api/public/static
-      - media_volume:/var/www/api.quran.kg/api/app/quran_kg/media
+      - static_volume:/var/www/mailganer/public/static
     expose:
       - 8000
     env_file:
       - ./docker/env/.env.prod
-    depends_on:
-      - db
-    links:
-      - db:db
     networks:
       - backend
+
+  redis:
+    image: redis:7.0.5-bullseye
+    networks:
+      - backend
+    expose:
+      - 6379
+    volumes:
+      - .:/app
+    container_name: redis
+
+  celery:
+    build:
+      context: .
+      dockerfile: docker/DockerFile.prod
+    command: python -m celery -A app.core worker
+    env_file:
+      - ./docker/env/.env.dev
+    volumes:
+      - .:/app
+    networks:
+      - backend
+    depends_on:
+      - redis
+      - app
+    container_name: celery
 
   nginx:
     build: ./nginx
     ports:
       - "80:80"
     volumes:
-      - static_volume:/var/www/api.quran.kg/api/public/static
-      - media_volume:/var/www/api.quran.kg/api/app/quran_kg/media
+      - static_volume:/var/www/mailganer/public/static
     depends_on:
       - app
     networks:
@@ -54,4 +62,3 @@ networks:
 volumes:
   postgres_data:
   static_volume:
-  media_volume:

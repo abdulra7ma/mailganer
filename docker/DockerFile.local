@@ -1,5 +1,5 @@
 # pull official base image
-FROM python:3.10-slim-bullseye as builder
+FROM python:2.7.18-slim-buster as builder
 
 # set work directory
 WORKDIR /usr/src/app
@@ -11,50 +11,47 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONFAULTHANDLER 1
 
 RUN apt-get update \
-    && apt-get install --yes --no-install-recommends gcc g++ libffi-dev python-dev\
+    && apt-get install --yes --no-install-recommends gcc g++ libffi-dev python2-dev \
     && apt-get autoremove --yes gcc g++ libffi-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# up
+# create the app user
+RUN groupadd app && \
+    useradd -rm -d /home/app -s /bin/bash -g app -G sudo -u 1001 app
+
+# update pip
 RUN pip install --upgrade pip
 
 # install dependencies
-COPY ../app/requirements-dev.txt .
-RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements-dev.txt
+COPY ./app/requirements.dev.txt .
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.dev.txt
 
 # pull official base image
-FROM python:3.10-slim-bullseye
-
-# create directory for the app user
-RUN mkdir -p /home/app
+FROM python:2.7.18-slim-buster
 
 # create the app user
 RUN groupadd app && \
     useradd -rm -d /home/app -s /bin/bash -g app -G sudo -u 1001 app
 
 # create the appropriate directories
-ENV APP_HOME=/var/www/api.quran.kg/api
+ENV APP_HOME=/var/www/mailganer
 RUN mkdir -p $APP_HOME
 WORKDIR $APP_HOME
 
 # install dependencies
-RUN apt-get update \
-    && apt-get install --yes --no-install-recommends libpq-dev
 COPY --from=builder /usr/src/app/wheels /wheels
-COPY --from=builder /usr/src/app/requirements-dev.txt .
+COPY --from=builder /usr/src/app/requirements.dev.txt .
+RUN pip install --upgrade pip
 RUN pip install --no-cache /wheels/*
 
 # copy project
 COPY ../. $APP_HOME
 
-RUN pwd && ls
-
 # copy entrypoint.prod.sh
 COPY ./scripts/deploy/entrypoint.prod.sh .
-RUN chmod +x  $APP_HOME/scripts/entrypoint.prod.sh
+RUN chmod +x  $APP_HOME/scripts/deploy/entrypoint.prod.sh
 
-# RUN mkdir $APP_HOME/run/staticfiles
-#RUN chmod -R 755 $APP_HOME/public/static
+RUN cp ./scripts/python/posixpath.py /usr/local/lib/python2.7/posixpath.py
 
 # chown all the files to the app user
 RUN chown -R app:app $APP_HOME
@@ -62,5 +59,3 @@ RUN chown -R app:app $APP_HOME
 # change to the app user
 USER app
 
-# run entrypoint.prod.sh
-ENTRYPOINT ["/var/www/api.quran.kg/api/scripts/entrypoint.prod.sh"]

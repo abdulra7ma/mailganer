@@ -37,6 +37,5 @@ class ScheduledMailView(FormView):
 
     def form_valid(self, form):
         form.save()
-        instance = form.instance
-        broadcast_scheduled_newsletter.apply_async((form.instance.id,), eta=instance.send_on)
+        broadcast_scheduled_newsletter.delay(form.instance.id)
         return HttpResponseRedirect(self.get_success_url())

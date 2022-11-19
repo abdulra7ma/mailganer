@@ -3,22 +3,18 @@ import os
 from decouple import config
 from pathlib import Path
 from django.template.context_processors import media
+from os.path import dirname
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-def rel(*path):
-    return BASE_DIR.joinpath(*path)
-
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'wtq^6d#k%mutsjznehecz12y)_#e+xg85!ta=gd*6-&9(jeelx'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("DEBUG", default=True)
+
+print("DEBUG: ", DEBUG)
 
 ALLOWED_HOSTS = []
 
@@ -53,8 +49,8 @@ ROOT_URLCONF = 'app.core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [rel('mail', 'templates'),
-                 rel("mail", 'templates', 'email_templates')],
+        'DIRS': [os.path.join(BASE_DIR, "mail", "templates"),
+                 os.path.join(BASE_DIR, "mail", "templates",'email_templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -73,13 +69,9 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST': config('POSTGRES_DATABASE_HOST', default="localhost"),
-        'NAME': config('POSTGRES_DATABASE_NAME', default="postgres"),
-        'USER': config('POSTGRES_DATABASE_USER', default="postgres"),
-        'PASSWORD': config('POSTGRES_DATABASE_PASSWORD', default="db_password"),
-        'PORT': int(config('POSTGRES_DATABASE_PORT', default=5432)),
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "dev.sqlite3")
     }
 }
 
@@ -119,7 +111,7 @@ USE_TZ = True
 
 STATIC_URL = config("STATIC_URL", default="/static/")
 STATIC_ROOT = config(
-    "STATIC_ROOT", default=rel("..", "public", "static")
+    "STATIC_ROOT", default=os.path.join(dirname(BASE_DIR), "public", "static")
 )
 
 MEDIA_URL = config("MEDIA_DIR_ROOT", default="/media/")
