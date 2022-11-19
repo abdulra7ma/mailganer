@@ -1,17 +1,10 @@
-*.xml
-app/db.sqlite3
-*.sqlite3
+### Django ###
 .env
-
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-.hypothesis/
-.pytest_cache/
-
+*.xml
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
