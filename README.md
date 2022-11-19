@@ -59,6 +59,11 @@ python app/manage.py migrate
 ```shell
 python app/manage.py runserver
 ```
+5. запустить рабочий Celery
+> **_NOTE:_** Celery использует Redis в качестве брокера, поэтому Redis должен работать локально на вашем компьютере
+```shell
+python -m celery -A app.core worker
+```
 
 ## Run in docker
 ### run in a docker dev environment
